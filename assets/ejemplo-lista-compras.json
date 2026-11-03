@@ -1,0 +1,141 @@
+{
+  "app": "mi-inventario",
+  "version": 1,
+  "type": "shopping",
+  "exportedAt": "2026-11-03T18:00:00.000Z",
+  "items": [
+    {
+      "id": "shop_demo_arroz",
+      "sourceItemId": null,
+      "manual": true,
+      "name": "Arroz largo fino",
+      "category": "Alimentos",
+      "unit": "kg",
+      "query": "arroz largo fino 1kg",
+      "currentQuantity": null,
+      "minQuantity": null,
+      "buyQuantity": 1,
+      "buyQuantityEdited": true,
+      "checked": false,
+      "status": "pending",
+      "prices": {
+        "coto": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null },
+        "masonline": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null }
+      },
+      "createdAt": "2026-11-03T17:40:00.000Z",
+      "updatedAt": "2026-11-03T17:40:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "shop_demo_detergente",
+      "sourceItemId": null,
+      "manual": true,
+      "name": "Detergente concentrado",
+      "category": "Limpieza",
+      "unit": "L",
+      "query": "detergente concentrado 500ml",
+      "currentQuantity": null,
+      "minQuantity": null,
+      "buyQuantity": 1,
+      "buyQuantityEdited": true,
+      "checked": false,
+      "status": "pending",
+      "prices": {
+        "coto": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null },
+        "masonline": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null }
+      },
+      "createdAt": "2026-11-03T17:41:00.000Z",
+      "updatedAt": "2026-11-03T17:41:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "shop_demo_yerba",
+      "sourceItemId": null,
+      "manual": true,
+      "name": "Yerba mate",
+      "category": "Bebidas",
+      "unit": "kg",
+      "query": "yerba mate 1kg",
+      "currentQuantity": null,
+      "minQuantity": null,
+      "buyQuantity": 1,
+      "buyQuantityEdited": true,
+      "checked": false,
+      "status": "pending",
+      "prices": {
+        "coto": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null },
+        "masonline": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null }
+      },
+      "createdAt": "2026-11-03T17:42:00.000Z",
+      "updatedAt": "2026-11-03T17:42:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "shop_demo_azucar",
+      "sourceItemId": null,
+      "manual": true,
+      "name": "Azúcar",
+      "category": "Alimentos",
+      "unit": "kg",
+      "query": "azúcar 1kg",
+      "currentQuantity": null,
+      "minQuantity": null,
+      "buyQuantity": 1,
+      "buyQuantityEdited": true,
+      "checked": false,
+      "status": "pending",
+      "prices": {
+        "coto": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null },
+        "masonline": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null }
+      },
+      "createdAt": "2026-11-03T17:43:00.000Z",
+      "updatedAt": "2026-11-03T17:43:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "shop_demo_atun",
+      "sourceItemId": null,
+      "manual": true,
+      "name": "Atún en lata",
+      "category": "Alimentos",
+      "unit": "lata",
+      "query": "atún al natural 170g",
+      "currentQuantity": null,
+      "minQuantity": null,
+      "buyQuantity": 2,
+      "buyQuantityEdited": true,
+      "checked": false,
+      "status": "pending",
+      "prices": {
+        "coto": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null },
+        "masonline": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null }
+      },
+      "createdAt": "2026-11-03T17:44:00.000Z",
+      "updatedAt": "2026-11-03T17:44:00.000Z",
+      "completedAt": null
+    },
+    {
+      "id": "shop_demo_huevos",
+      "sourceItemId": null,
+      "manual": true,
+      "name": "Huevos",
+      "category": "Alimentos",
+      "unit": "unidad",
+      "query": "huevos color 12 unidades",
+      "currentQuantity": null,
+      "minQuantity": null,
+      "buyQuantity": 12,
+      "buyQuantityEdited": true,
+      "checked": false,
+      "status": "pending",
+      "prices": {
+        "coto": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null },
+        "masonline": { "status": "empty", "selected": null, "best": null, "candidates": [], "error": null, "fetchedAt": null }
+      },
+      "createdAt": "2026-11-03T17:45:00.000Z",
+      "updatedAt": "2026-11-03T17:45:00.000Z",
+      "completedAt": null
+    }
+  ],
+  "meta": { "lastPricesAt": null }
+}

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es-AR" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Mi Inventario: controlá lo que hay en casa, generá tu lista de compras y compará precios en COTO y ChangoMas.">
+  <meta name="color-scheme" content="light dark">
+  <title>Mi Inventario — alacena y lista de compras</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%BA%3C/text%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">🧺</span>
+        <div class="brand-text">
+          <h1>Mi Inventario</h1>
+          <p>Veamos qué tenemos en la alacena</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <button id="backend-status" class="status-badge" type="button" title="Probar conexión con el backend" aria-label="Estado del backend: probar conexión">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span id="status-text">conectando…</span>
+        </button>
+        <button id="btn-theme" class="icon-btn" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema">
+          <span id="theme-icon" aria-hidden="true">🌙</span>
+        </button>
+        <button id="btn-data" class="btn btn-ghost" type="button">Datos</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido" class="container" tabindex="-1">
+    <section class="summary" aria-label="Resumen del inventario">
+      <article class="summary-card">
+        <span class="summary-icon" aria-hidden="true">📦</span>
+        <div>
+          <p class="summary-value" id="inventory-count">0</p>
+          <p class="summary-label">elementos en total</p>
+        </div>
+      </article>
+      <article class="summary-card">
+        <span class="summary-icon" aria-hidden="true">⚠️</span>
+        <div>
+          <p class="summary-value" id="inventory-low-count">0</p>
+          <p class="summary-label">en mínimo o agotados</p>
+        </div>
+      </article>
+      <article class="summary-card">
+        <span class="summary-icon" aria-hidden="true">🏷️</span>
+        <div>
+          <p class="summary-value" id="inventory-category-count">0</p>
+          <p class="summary-label">categorías</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="card" aria-labelledby="inventory-title">
+      <div class="card-head">
+        <div>
+          <h2 id="inventory-title">Mi Inventario</h2>
+          <p class="card-subtitle">Agregá un elemento, definí su mínimo y te aviso cuando haya que comprarlo.</p>
+        </div>
+        <div class="card-head-actions">
+          <span class="count-badge" id="inventory-section-count">0</span>
+          <button id="btn-add-item" class="btn btn-primary" type="button">＋ Agregar elemento</button>
+        </div>
+      </div>
+
+      <div class="toolbar" role="search">
+        <label class="field field-search">
+          <span class="sr-only">Buscar en el inventario</span>
+          <input id="inventory-search" type="search" placeholder="¿Qué hay en la alacena?" autocomplete="off">
+        </label>
+        <label class="field">
+          <span class="sr-only">Filtrar por categoría</span>
+          <select id="inventory-category">
+            <option value="">Todas las categorías</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="sr-only">Ordenar el inventario</span>
+          <select id="inventory-sort">
+            <option value="name">Ordenar por nombre</option>
+            <option value="status">Ordenar por estado</option>
+            <option value="recent">Ordenar por reciente</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="table-wrap">
+        <table class="data-table inventory-table">
+          <caption class="sr-only">Elementos del inventario con cantidad, mínimo y estado</caption>
+          <thead>
+            <tr>
+              <th scope="col">Elemento</th>
+              <th scope="col">Categoría</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Mínimo</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="inventory-list"></tbody>
+        </table>
+      </div>
+
+      <div id="inventory-empty" class="empty-state" hidden>
+        <span class="empty-icon" aria-hidden="true">🧺</span>
+        <h3>Tu inventario está vacío</h3>
+        <p>Agregá el primer elemento para empezar a controlar lo que hay en casa.</p>
+        <button class="btn btn-primary" type="button" data-action="add-item">Agregar elemento</button>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="shopping-title">
+      <div class="card-head">
+        <div>
+          <h2 id="shopping-title">Listado de Compras</h2>
+          <p class="card-subtitle">Los elementos en su mínimo entran solos. Después comparás precios.</p>
+        </div>
+        <div class="card-head-actions">
+          <span class="count-badge" id="shopping-count">0</span>
+          <button id="btn-refresh-prices" class="btn btn-secondary" type="button">↻ Actualizar precios</button>
+          <button id="btn-add-manual" class="btn btn-ghost" type="button">＋ Agregar suelto</button>
+          <button id="btn-clear-completed" class="btn btn-ghost" type="button">Limpiar comprados</button>
+        </div>
+      </div>
+
+      <p class="price-note">
+        Precios orientativos: pueden variar por sucursal, stock y medio de pago.
+        Se consultan en el momento y quedan guardados en tu navegador.
+      </p>
+      <p id="price-status" class="price-status" role="status" aria-live="polite"></p>
+
+      <div class="table-wrap">
+        <table class="data-table shopping-table">
+          <caption class="sr-only">Listado de compras con precios de COTO y ChangoMas</caption>
+          <thead>
+            <tr>
+              <th scope="col">Comprado</th>
+              <th scope="col">Elemento</th>
+              <th scope="col">Cantidad actual</th>
+              <th scope="col">Comprar</th>
+              <th scope="col">COTO</th>
+              <th scope="col">ChangoMas</th>
+              <th scope="col">Mejor</th>
+              <th scope="col">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="shopping-list"></tbody>
+        </table>
+      </div>
+
+      <div id="shopping-empty" class="empty-state" hidden>
+        <span class="empty-icon" aria-hidden="true">✅</span>
+        <h3>Nada por comprar</h3>
+        <p>Todo en orden. Cuando un elemento llegue a su mínimo, va a aparecer acá.</p>
+        <button class="btn btn-ghost" type="button" data-action="add-manual">Agregar algo suelto</button>
+      </div>
+
+      <div class="totals" aria-label="Totales estimados del listado de compras">
+        <div class="total">
+          <span class="total-label">Total COTO</span>
+          <strong id="shopping-total-coto">—</strong>
+        </div>
+        <div class="total">
+          <span class="total-label">Total ChangoMas</span>
+          <strong id="shopping-total-masonline">—</strong>
+        </div>
+        <div class="total total-best">
+          <span class="total-label">Mejor total estimado</span>
+          <strong id="shopping-total-best">—</strong>
+        </div>
+        <p id="shopping-total-note" class="totals-note">Los totales son orientativos: el precio es por unidad de venta y puede no coincidir con el gramaje exacto.</p>
+      </div>
+    </section>
+
+    <section id="history-section" class="card history-card" aria-labelledby="history-title">
+      <div class="card-head">
+        <div>
+          <h2 id="history-title">Historial de compras</h2>
+          <p class="card-subtitle">Lo que fuiste reponiendo, con su precio y fecha.</p>
+        </div>
+        <div class="card-head-actions">
+          <button id="btn-toggle-history" class="btn btn-ghost" type="button" data-action="toggle-history" aria-expanded="false" aria-controls="history-body">Mostrar historial</button>
+          <button id="btn-clear-history" class="btn btn-ghost" type="button">Vaciar historial</button>
+        </div>
+      </div>
+
+      <div id="history-body" hidden>
+        <p id="history-total" class="history-summary"></p>
+        <ul id="history-list" class="history-list"></ul>
+        <div id="history-empty" class="empty-state" hidden>
+          <span class="empty-icon" aria-hidden="true">🕘</span>
+          <h3>Todavía no registraste compras</h3>
+          <p>Marcá un elemento como recibido y va a quedar acá.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>🔒 Tus datos se guardan solo en este navegador (<code>localStorage</code>). No hay cuentas ni servidor de datos.</p>
+      <p>Precios orientativos obtenidos de sitios públicos. Ver en
+        <a href="https://www.coto.com.ar/" target="_blank" rel="noopener noreferrer">COTO</a> y
+        <a href="https://www.masonline.com.ar/" target="_blank" rel="noopener noreferrer">ChangoMas</a>.
+      </p>
+      <p id="print-date" class="print-only"></p>
+    </div>
+  </footer>
+
+  <!-- Alta / edición de elemento -->
+  <dialog id="item-dialog" class="dialog dialog-item" aria-labelledby="item-dialog-title">
+    <form id="item-form" class="dialog-form" novalidate>
+      <div class="dialog-head">
+        <h2 id="item-dialog-title">Agregar elemento</h2>
+        <button class="icon-btn" type="button" data-close-dialog aria-label="Cerrar el formulario" title="Cerrar">✕</button>
+      </div>
+
+      <div class="dialog-body">
+        <div class="form-grid">
+          <label class="field field-wide">
+            <span>Nombre <em>*</em></span>
+            <input id="item-name" name="name" type="text" maxlength="80" required autocomplete="off" placeholder="Ej.: Arroz largo fino">
+          </label>
+
+          <label class="field">
+            <span>Categoría <em>*</em></span>
+            <input id="item-category" name="category" type="text" list="category-options" maxlength="40" required placeholder="Alimentos">
+          </label>
+
+          <label class="field">
+            <span>Unidad <em>*</em></span>
+            <input id="item-unit" name="unit" type="text" list="unit-options" maxlength="12" required placeholder="unidad">
+          </label>
+
+          <label class="field">
+            <span>Cantidad actual</span>
+            <input id="item-quantity" name="quantity" type="number" min="0" max="99999" step="0.01" inputmode="decimal" value="0">
+          </label>
+
+          <label class="field">
+            <span>Mínimo</span>
+            <input id="item-min" name="minQuantity" type="number" min="0" max="99999" step="0.01" inputmode="decimal" value="1">
+          </label>
+
+          <label class="field field-wide">
+            <span>Término de búsqueda para precios <small>(opcional)</small></span>
+            <input id="item-query" name="query" type="text" maxlength="80" autocomplete="off" placeholder="Ej.: arroz largo fino 1kg">
+            <small class="field-help">Si lo dejás vacío se usa el nombre. Sirve para encontrar el producto justo.</small>
+          </label>
+
+          <label class="field field-wide">
+            <span>Nota <small>(opcional)</small></span>
+            <textarea id="item-note" name="note" maxlength="300" rows="3" placeholder="Ej.: Comprar Gallo o Lucchetti"></textarea>
+          </label>
+        </div>
+
+        <p id="item-error" class="form-error" role="alert" hidden></p>
+      </div>
+
+      <div class="dialog-foot">
+        <button id="item-delete" class="btn btn-danger" type="button" hidden>Eliminar</button>
+        <span class="spacer"></span>
+        <button id="item-cancel" class="btn btn-ghost" type="button">Cancelar</button>
+        <button id="item-save" class="btn btn-primary" type="submit">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Compra suelta -->
+  <dialog id="manual-dialog" class="dialog" aria-labelledby="manual-dialog-title">
+    <form id="manual-form" class="dialog-form" novalidate>
+      <div class="dialog-head">
+        <h2 id="manual-dialog-title">Agregar suelto a la lista</h2>
+        <button class="icon-btn" type="button" data-close-dialog aria-label="Cerrar el formulario" title="Cerrar">✕</button>
+      </div>
+
+      <div class="dialog-body">
+        <div class="form-grid">
+          <label class="field field-wide">
+            <span>Nombre <em>*</em></span>
+            <input id="manual-name" name="name" type="text" maxlength="80" required autocomplete="off" placeholder="Ej.: Papel higiénico">
+          </label>
+          <label class="field">
+            <span>Categoría</span>
+            <input id="manual-category" name="category" type="text" list="category-options" maxlength="40" placeholder="Otros">
+          </label>
+          <label class="field">
+            <span>Unidad</span>
+            <input id="manual-unit" name="unit" type="text" list="unit-options" maxlength="12" placeholder="unidad">
+          </label>
+          <label class="field">
+            <span>Cantidad a comprar <em>*</em></span>
+            <input id="manual-quantity" name="quantity" type="number" min="0.01" max="99999" step="0.01" inputmode="decimal" value="1">
+          </label>
+        </div>
+        <p id="manual-error" class="form-error" role="alert" hidden></p>
+      </div>
+
+      <div class="dialog-foot">
+        <span class="spacer"></span>
+        <button id="manual-cancel" class="btn btn-ghost" type="button">Cancelar</button>
+        <button id="manual-save" class="btn btn-primary" type="submit">Agregar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Elección de producto/precio -->
+  <dialog id="candidate-dialog" class="dialog dialog-candidates" aria-labelledby="candidate-title">
+    <div class="dialog-form">
+      <div class="dialog-head">
+        <h2 id="candidate-title">Elegir producto</h2>
+        <button id="candidate-close" class="icon-btn" type="button" data-close-dialog aria-label="Cerrar la elección de producto" title="Cerrar">✕</button>
+      </div>
+      <div class="dialog-body">
+        <p class="candidate-help">Elegí el producto que mejor coincide con lo que necesitás. El precio es el de la unidad de venta.</p>
+        <div id="candidate-list" class="candidate-list"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Datos: exportar, importar y borrar -->
+  <dialog id="data-dialog" class="dialog dialog-data" aria-labelledby="data-dialog-title">
+    <div class="dialog-form">
+      <div class="dialog-head">
+        <h2 id="data-dialog-title">Tus datos</h2>
+        <button class="icon-btn" type="button" data-close-dialog aria-label="Cerrar el diálogo de datos" title="Cerrar">✕</button>
+      </div>
+
+      <div class="dialog-body">
+        <section class="data-block" aria-labelledby="data-inventory-title">
+          <h3 id="data-inventory-title">Inventario</h3>
+          <div class="button-row">
+            <button id="btn-export-inventory-json" class="btn btn-secondary" type="button">Exportar JSON</button>
+            <button id="btn-export-inventory-txt" class="btn btn-secondary" type="button">Exportar TXT</button>
+          </div>
+          <div class="import-box">
+            <label class="field">
+              <span>Archivo para importar</span>
+              <input id="inventory-import-file" type="file" accept=".json,.txt,application/json,text/plain">
+            </label>
+            <fieldset class="radio-row">
+              <legend class="sr-only">Modo de importación del inventario</legend>
+              <label><input type="radio" name="inventory-import-mode" value="merge" checked> Combinar</label>
+              <label><input type="radio" name="inventory-import-mode" value="replace"> Reemplazar todo</label>
+            </fieldset>
+            <button id="btn-import-inventory" class="btn btn-primary" type="button">Importar inventario</button>
+          </div>
+        </section>
+
+        <section class="data-block" aria-labelledby="data-shopping-title">
+          <h3 id="data-shopping-title">Listado de compras</h3>
+          <div class="button-row">
+            <button id="btn-export-shopping-json" class="btn btn-secondary" type="button">Exportar JSON</button>
+            <button id="btn-export-shopping-txt" class="btn btn-secondary" type="button">Exportar TXT</button>
+          </div>
+          <div class="import-box">
+            <label class="field">
+              <span>Archivo para importar</span>
+              <input id="shopping-import-file" type="file" accept=".json,.txt,application/json,text/plain">
+            </label>
+            <fieldset class="radio-row">
+              <legend class="sr-only">Modo de importación de la lista de compras</legend>
+              <label><input type="radio" name="shopping-import-mode" value="merge" checked> Combinar</label>
+              <label><input type="radio" name="shopping-import-mode" value="replace"> Reemplazar todo</label>
+            </fieldset>
+            <button id="btn-import-shopping" class="btn btn-primary" type="button">Importar lista</button>
+          </div>
+        </section>
+
+        <p id="import-result" class="import-result" role="status" aria-live="polite" hidden></p>
+
+        <section class="data-block danger-zone" aria-labelledby="data-wipe-title">
+          <h3 id="data-wipe-title">Zona de peligro</h3>
+          <p>Borra inventario, listado de compras, historial y ajustes de este navegador.</p>
+          <button id="btn-wipe-all" class="btn btn-danger" type="button">Borrar todos los datos</button>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <datalist id="category-options">
+    <option value="Alimentos"></option>
+    <option value="Bebidas"></option>
+    <option value="Limpieza"></option>
+    <option value="Higiene"></option>
+    <option value="Cocina"></option>
+    <option value="Otros"></option>
+  </datalist>
+
+  <datalist id="unit-options">
+    <option value="unidad"></option>
+    <option value="kg"></option>
+    <option value="g"></option>
+    <option value="L"></option>
+    <option value="ml"></option>
+    <option value="paquete"></option>
+    <option value="caja"></option>
+    <option value="botella"></option>
+    <option value="lata"></option>
+    <option value="docena"></option>
+  </datalist>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

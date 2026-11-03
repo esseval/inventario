@@ -1,0 +1,54 @@
+<?php
+/**
+ * Mi Inventario — configuración opcional.
+ *
+ * Copiá este archivo a `config.php` y ajustá lo que necesites. Si `config.php`
+ * no existe, `proxy.php` usa exactamente estos mismos valores por defecto.
+ *
+ * `config.php` NO se versiona (está en .gitignore).
+ */
+
+declare(strict_types=1);
+
+return [
+    // Segundos que se reutiliza una consulta de precios desde la caché.
+    'price_ttl' => 600,
+
+    // Timeout de cada petición a las tiendas, en segundos (3–30).
+    'timeout' => 15,
+
+    // Peticiones simultáneas cuando curl_multi está disponible (1–10).
+    'concurrency' => 6,
+
+    // Máximo de elementos por lote en prices-batch (1–25).
+    'max_batch' => 25,
+
+    // Puntaje mínimo (0–100) para elegir un candidato automáticamente.
+    'min_score' => 35,
+
+    // User-Agent de navegador estándar. No se usa para evadir protecciones.
+    'user_agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+        . '(KHTML, like Gecko) Chrome/124.0 Safari/537.36',
+
+    'coto' => [
+        // Activá o desactivá la tienda sin tocar el resto de la app.
+        'enabled' => true,
+
+        // Endpoint público que alimenta la búsqueda de COTO.
+        'base' => 'https://api.coto.com.ar/api/v1/ms-digital-sitio-bff-web/api/v1',
+
+        // Clave pública embebida en la web de COTO. Puede cambiar; si COTO
+        // deja de responder, revisá primero este valor en el sitio.
+        'key' => 'key_r6xzz4IAoTWcipni',
+
+        // Sucursal digital (3 dígitos). 200 es la usada por defecto.
+        'store' => '200',
+    ],
+
+    'masonline' => [
+        'enabled' => true,
+
+        // Endpoint público de catálogo de ChangoMas (VTEX).
+        'base' => 'https://www.masonline.com.ar/api/catalog_system/pub/products/search/',
+    ],
+];

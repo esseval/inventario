@@ -1,0 +1,11 @@
+# Configuración local (puede contener ajustes propios de la sucursal)
+config.php
+
+# Caché de precios generada por proxy.php
+cache/*.json
+cache/*.tmp
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini

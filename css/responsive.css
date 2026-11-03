@@ -1,0 +1,494 @@
+/* ==========================================================================
+   Mi Inventario — responsive e impresión
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   ≤ 900 px: tablas como tarjetas, resumen en 2 columnas
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .table-wrap {
+    border: 0;
+    overflow: visible;
+  }
+
+  .data-table,
+  .data-table tbody,
+  .data-table tr,
+  .data-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .data-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .data-table tr {
+    margin-bottom: .65rem;
+    padding: .4rem .25rem;
+    background: var(--card-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .data-table tbody tr.is-low {
+    border-color: color-mix(in srgb, var(--warn) 45%, var(--border));
+  }
+
+  .data-table tbody tr.is-out {
+    border-color: color-mix(in srgb, var(--danger) 40%, var(--border));
+  }
+
+  .data-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: .4rem .65rem;
+    border: 0;
+    text-align: right;
+  }
+
+  .data-table td::before {
+    content: attr(data-label);
+    flex: none;
+    max-width: 45%;
+    text-align: left;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .data-table td.cell-actions {
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border);
+    margin-top: .25rem;
+    padding-top: .55rem;
+  }
+
+  .data-table td.cell-actions::before {
+    margin-right: auto;
+    align-self: center;
+  }
+
+  .item-meta {
+    max-width: 100%;
+    margin-left: auto;
+  }
+
+  .price-cell {
+    min-width: 0;
+  }
+
+  .price-product {
+    max-width: 100%;
+    margin-left: auto;
+  }
+
+  .cell-price-actions {
+    justify-content: flex-end;
+  }
+
+  .check-cell {
+    width: 100%;
+  }
+
+  .stepper {
+    margin-left: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 720 px: header compacto, formularios y acciones en columna
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 720px) {
+  body {
+    font-size: 14.5px;
+  }
+
+  .container {
+    width: calc(100% - 1.4rem);
+  }
+
+  .header-inner {
+    padding-block: .55rem;
+    gap: .5rem;
+  }
+
+  .brand-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.25rem;
+    border-radius: 10px;
+  }
+
+  .brand-text h1 {
+    font-size: 1.12rem;
+  }
+
+  .brand-text p {
+    font-size: .74rem;
+  }
+
+  .status-badge {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  .status-badge #status-text {
+    display: none;
+  }
+
+  .status-badge .status-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  main {
+    padding-block: 1rem 1.8rem;
+    gap: .9rem;
+  }
+
+  .summary {
+    gap: .7rem;
+  }
+
+  .summary-card {
+    padding: .75rem .85rem;
+    gap: .65rem;
+  }
+
+  .summary-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+  }
+
+  .summary-value {
+    font-size: 1.5rem;
+  }
+
+  .summary-label {
+    font-size: .76rem;
+  }
+
+  .card {
+    padding: .9rem .85rem 1rem;
+    border-radius: 12px;
+  }
+
+  .card-head {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .65rem;
+  }
+
+  .card-head-actions {
+    width: 100%;
+  }
+
+  .card-head-actions .btn {
+    flex: 1 1 auto;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: .5rem;
+  }
+
+  .field-search {
+    flex: 1 1 auto;
+  }
+
+  .form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .totals {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dialog {
+    width: calc(100% - 1rem);
+    max-height: calc(100vh - 1rem);
+  }
+
+  .dialog-body {
+    padding: .9rem;
+  }
+
+  .dialog-foot {
+    flex-wrap: wrap;
+  }
+
+  .dialog-foot .btn {
+    flex: 1 1 130px;
+    min-width: 0;
+  }
+
+  .dialog-foot .spacer {
+    display: none;
+  }
+
+  .candidate {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+
+  .candidate img,
+  .candidate-img-fallback {
+    width: 48px;
+    height: 48px;
+  }
+
+  .candidate-actions {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .candidate-actions .btn {
+    flex: 1 1 auto;
+  }
+
+  .candidate-score {
+    margin-right: auto;
+  }
+
+  .history-item {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: .25rem;
+  }
+
+  .history-amount {
+    align-self: flex-end;
+  }
+
+  .toast {
+    bottom: .7rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 420 px: una columna y controles compactos
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 420px) {
+  .summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .brand-text p {
+    display: none;
+  }
+
+  .header-actions {
+    gap: .3rem;
+  }
+
+  .data-table td {
+    gap: .5rem;
+  }
+
+  .data-table td::before {
+    font-size: .68rem;
+  }
+
+  .badge {
+    padding: .12rem .4rem;
+    font-size: .68rem;
+  }
+
+  .btn {
+    padding: .5rem .7rem;
+    font-size: .82rem;
+  }
+
+  .btn-small {
+    padding: .3rem .45rem;
+    font-size: .74rem;
+  }
+
+  .stepper input {
+    width: 58px;
+  }
+
+  .count-badge {
+    min-width: 26px;
+    height: 26px;
+    font-size: .78rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Impresión
+   -------------------------------------------------------------------------- */
+
+.print-only {
+  display: none;
+}
+
+@media print {
+  body {
+    font-size: 10.5pt;
+    color: #000;
+    background: #fff;
+  }
+
+  .site-header,
+  .site-footer,
+  .summary,
+  .toolbar,
+  .card-head-actions,
+  .card-subtitle,
+  .price-note,
+  .price-status,
+  .totals-note,
+  .history-card,
+  .toast,
+  .btn,
+  .icon-btn,
+  .skip-link,
+  .check-cell,
+  .cell-actions,
+  .cell-price-actions,
+  .empty-state {
+    display: none !important;
+  }
+
+  main {
+    padding: 0;
+    gap: .8rem;
+  }
+
+  .container {
+    width: 100%;
+  }
+
+  .card {
+    padding: 0;
+    margin-bottom: 1rem;
+    border: 1px solid #d7d7d7;
+    border-radius: 6px;
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .card-head {
+    padding: .4rem .6rem;
+    margin: 0;
+    border-bottom: 1px solid #d7d7d7;
+  }
+
+  .card-head h2 {
+    font-size: 13pt;
+  }
+
+  .table-wrap {
+    border: 0;
+    overflow: visible;
+  }
+
+  .data-table,
+  .data-table tbody,
+  .data-table tr,
+  .data-table td,
+  .data-table th {
+    display: revert;
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+  }
+
+  .data-table thead {
+    position: static;
+    width: auto;
+    height: auto;
+    clip: auto;
+    overflow: visible;
+    display: table-header-group;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: .25rem .35rem;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  .data-table td::before {
+    display: none !important;
+    content: none;
+  }
+
+  .data-table thead th {
+    background: #f2f2f2;
+    color: #000;
+  }
+
+  .data-table tbody tr {
+    background: transparent !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .data-table tbody tr.is-low,
+  .data-table tbody tr.is-out {
+    background: transparent !important;
+  }
+
+  .badge {
+    padding: 0;
+    border: 0;
+    color: #000;
+    background: transparent;
+  }
+
+  .badge::after {
+    content: "";
+  }
+
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  .print-only {
+    display: block !important;
+    margin-top: .6rem;
+    font-size: 8.5pt;
+    color: #444;
+  }
+
+  @page {
+    margin: 12mm;
+  }
+}
